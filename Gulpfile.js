@@ -4,10 +4,15 @@ var gulp = require('gulp'),
   nodemon = require('gulp-nodemon'),
   watch = require('gulp-watch'),
   jshint = require('gulp-jshint'),
+  karma = require('gulp-karma'),
   jasmine = require('gulp-jasmine'),
   livereload = require('gulp-livereload'),
   app = require('./app');
 
+var testFiles = [
+
+  'spec/front-end/*.js'
+];
 
 gulp.task('dev-server',  function() {
   app.listen(3000);
@@ -16,6 +21,8 @@ gulp.task('dev-server',  function() {
 gulp.task('test-server', function() {
   app.listen(3001);
 });
+
+
 
 //register nodemon task
 gulp.task('nodemon', function () {
@@ -34,6 +41,23 @@ gulp.task('watch', function() {
     gulp.watch(['*.js','routes/*.js', 'views/**/*.*', 'public/**/*.*']).on('change', function(file) {
       server.changed(file.path);
   });
+});
+
+//karma js files
+gulp.task('karma-test', function() {
+  // Be sure to return the stream
+  return gulp.src(testFiles)
+         .pipe(karma({
+          configFile: 'karma.conf.js',
+          action: 'run'
+    }))
+    .on('end', function() {
+      process.exit();
+    })
+    .on('error', function() {
+      // Make sure failed tests cause gulp to exit non-zero
+      this.emit();
+    });
 });
 
 //jasmine js files
