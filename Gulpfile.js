@@ -10,7 +10,7 @@ var gulp = require('gulp'),
   app = require('./app');
 
 var testFiles = [
-
+  'app/unit-test/requester.frontEnd.js',
   'spec/front-end/*.js'
 ];
 
